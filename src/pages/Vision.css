@@ -1,0 +1,684 @@
+/* ============================================================
+   Computer Vision page — a cooler, HUD/perception counterpart to
+   the warm audio portfolio. Cyan-forward, technical grid, bounding
+   boxes and depth-coloured point clouds. Reuses the design tokens.
+   ============================================================ */
+
+.vpage {
+  min-height: 100vh;
+  background-color: var(--bg);
+  /* faint calibration grid */
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--violet) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--violet) 22%, transparent) 1px, transparent 1px);
+  background-size: 46px 46px;
+  color: var(--text);
+}
+
+.vpage__wrap,
+.vpage main {
+  max-width: min(1240px, 92vw);
+  margin-inline: auto;
+}
+
+/* ---------- Header ---------- */
+.vpage__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav, 50);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: min(1240px, 92vw);
+  margin-inline: auto;
+  padding: var(--space-3) 0;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid color-mix(in srgb, var(--detect) 22%, transparent);
+}
+.vpage__back {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  color: var(--cream);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.vpage__back:hover,
+.vpage__back:focus-visible {
+  color: var(--detect);
+}
+.vpage__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.vpage__navlink {
+  color: var(--text);
+  opacity: 0.8;
+  transition: color var(--dur-fast) var(--ease-out), opacity var(--dur-fast);
+}
+.vpage__navlink:hover,
+.vpage__navlink:focus-visible {
+  color: var(--detect);
+  opacity: 1;
+}
+.vpage__navlink--cta {
+  color: var(--detect);
+  opacity: 1;
+  border: 1px solid var(--detect);
+  padding: 0.35em 0.7em;
+}
+.vpage__navlink--cta:hover,
+.vpage__navlink--cta:focus-visible {
+  background: color-mix(in srgb, var(--detect) 16%, transparent);
+}
+
+/* ---------- Hero ---------- */
+.vhero {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: clamp(var(--space-5), 5vw, var(--space-10));
+  align-items: center;
+  padding-block: clamp(var(--space-8), 9vw, var(--space-16));
+}
+.vhero__eyebrow {
+  color: var(--detect);
+  margin-bottom: var(--space-3);
+}
+.vhero__title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 0.98;
+  color: var(--cream);
+  letter-spacing: var(--track-h1, -0.02em);
+}
+.vhero__tagline {
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+  color: var(--text);
+  margin-top: var(--space-4);
+  max-width: 34ch;
+}
+.vhero__supporting {
+  color: var(--text);
+  opacity: 0.75;
+  margin-top: var(--space-4);
+  max-width: 52ch;
+}
+.vhero__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  list-style: none;
+}
+.vhero__skills li {
+  color: var(--text);
+  opacity: 0.85;
+  border: 1px solid var(--line);
+  padding: 0.3em 0.6em;
+}
+.vhero__visual {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--detect) 30%, transparent);
+  box-shadow: 0 0 60px -20px color-mix(in srgb, var(--detect) 60%, transparent);
+  overflow: hidden;
+}
+
+/* ---------- Detection scene SVG ---------- */
+.vscene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 640 / 380;
+}
+.vscene__tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.vscene__id {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+}
+
+/* HUD overlay — a live camera-feed feel over the scene */
+.vhud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: var(--track-data);
+  text-transform: uppercase;
+}
+.vhud > * {
+  position: absolute;
+}
+.vhud__rec {
+  top: var(--space-2);
+  left: var(--space-3);
+  color: var(--coral);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.vhud__rec i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+.vhud__frame {
+  top: var(--space-2);
+  right: var(--space-3);
+  color: var(--detect);
+}
+.vhud__stat {
+  bottom: var(--space-2);
+  left: var(--space-3);
+  color: var(--text);
+  opacity: 0.6;
+  text-transform: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .vhud__rec i {
+    animation: vrec 1.2s steps(1, end) infinite;
+  }
+  @keyframes vrec {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0.25;
+    }
+  }
+}
+
+/* ---------- Sections ---------- */
+.vsection {
+  padding-block: clamp(var(--space-8), 8vw, var(--space-12));
+  border-top: 1px solid color-mix(in srgb, var(--violet) 35%, transparent);
+}
+.vsection__kicker {
+  color: var(--detect);
+  margin-bottom: var(--space-2);
+}
+.vsection__title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: var(--cream);
+  line-height: 1.05;
+}
+.vsection__lead {
+  color: var(--text);
+  opacity: 0.82;
+  max-width: 68ch;
+  margin-top: var(--space-4);
+  font-size: var(--fs-body-lg, 1.1rem);
+}
+.vsection__sub {
+  color: var(--amber);
+  margin-top: clamp(var(--space-6), 5vw, var(--space-10));
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-data);
+}
+.vsection__tech {
+  margin-top: clamp(var(--space-6), 5vw, var(--space-8));
+}
+
+/* ---------- Grids ---------- */
+.vgrid {
+  display: grid;
+  gap: clamp(var(--space-4), 3vw, var(--space-6));
+  margin-top: clamp(var(--space-5), 4vw, var(--space-8));
+}
+.vgrid--split {
+  grid-template-columns: 1fr 1fr;
+}
+.vgrid--tables {
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+}
+
+/* ---------- Cards ---------- */
+.vcard {
+  padding: clamp(var(--space-4), 3vw, var(--space-5));
+}
+.vcard__head {
+  color: var(--detect);
+  margin-bottom: var(--space-3);
+}
+.vcard--caveat .vcard__head {
+  color: var(--amber);
+}
+
+/* Secondary project card (More CV work) — full width to align with the other
+   blocks, with a two-column inner layout so it doesn't run to long lines. */
+.vmore {
+  margin-top: clamp(var(--space-5), 4vw, var(--space-8));
+}
+.vproject__grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(var(--space-5), 5vw, var(--space-8));
+  align-items: start;
+}
+.vproject__intro .vcard__summary {
+  margin-bottom: 0;
+}
+.vcard__kicker {
+  color: var(--detect);
+  margin-bottom: var(--space-2);
+}
+.vcard__title {
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  color: var(--cream);
+  line-height: 1.1;
+}
+.vcard__summary {
+  color: var(--text);
+  opacity: 0.82;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
+  max-width: 62ch;
+}
+.vcard__tech {
+  margin-top: var(--space-3);
+}
+
+.vlist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+}
+.vlist li {
+  position: relative;
+  padding-left: var(--space-3);
+  color: var(--text);
+  opacity: 0.88;
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body);
+}
+.vlist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  background: var(--detect);
+}
+.vlist--caveat li::before {
+  background: var(--amber);
+  transform: rotate(45deg);
+}
+
+/* ---------- Metric deltas ---------- */
+.vdeltas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.vdelta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-left: 2px solid var(--detect);
+  background: color-mix(in srgb, var(--detect) 6%, transparent);
+}
+.vdelta__label {
+  color: var(--text);
+  opacity: 0.7;
+}
+.vdelta__vals {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+}
+.vdelta__from {
+  color: var(--text);
+  opacity: 0.55;
+}
+.vdelta__arrow {
+  color: var(--detect);
+}
+.vdelta__to {
+  color: var(--detect);
+  font-size: 1.25em;
+  font-weight: 600;
+}
+.vdelta__hint {
+  color: var(--text);
+  opacity: 0.45;
+  font-size: 0.7rem;
+  text-transform: none;
+}
+
+/* ---------- Pipeline ---------- */
+.vpipe {
+  margin-top: clamp(var(--space-6), 5vw, var(--space-10));
+  padding: clamp(var(--space-4), 3vw, var(--space-6));
+  border: 1px solid color-mix(in srgb, var(--detect) 24%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.vpipe__lane {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.vpipe__lane-label {
+  flex: 0 0 5.5rem;
+  color: var(--violet-text, var(--magenta));
+}
+.vpipe__flow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.vpipe__node,
+.vpipe__fused {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.vpipe__arrow {
+  color: var(--detect);
+  font-family: var(--font-mono);
+}
+.vpipe__stage {
+  color: var(--cream);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+}
+.vpipe__detail {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text);
+  opacity: 0.6;
+}
+.vpipe__merge {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-data);
+  letter-spacing: var(--track-data);
+  color: var(--detect);
+  text-transform: uppercase;
+}
+.vpipe__fused {
+  border-color: var(--detect);
+  background: color-mix(in srgb, var(--detect) 10%, transparent);
+  align-items: flex-start;
+}
+.vpipe__fused .vpipe__stage {
+  color: var(--detect);
+}
+.vpipe__formula {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-data);
+  color: var(--amber);
+  background: var(--bg);
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed color-mix(in srgb, var(--amber) 40%, transparent);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* ---------- Tables ---------- */
+.vtable {
+  border: 1px solid var(--line);
+  min-width: 0; /* let the grid cell cap the width; the table scrolls if wider */
+  background: var(--surface); /* solid panel so it reads clearly over the grid bg */
+}
+.vtable__caption {
+  color: var(--detect);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--line);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.vtable__scroll {
+  overflow-x: auto;
+}
+.vtable table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+.vtable th,
+.vtable td {
+  padding: var(--space-2);
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+.vtable thead tr {
+  background: color-mix(in srgb, var(--detect) 8%, transparent);
+}
+.vtable th {
+  color: var(--text);
+  opacity: 0.6;
+  font-weight: var(--fw-medium);
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: var(--track-data);
+}
+.vtable__label {
+  text-align: left !important;
+  color: var(--cream);
+}
+.vtable__num {
+  color: var(--text);
+}
+.vtable tbody tr:last-child td {
+  border-bottom: none;
+}
+.vtable tbody tr:hover td {
+  background: color-mix(in srgb, var(--detect) 7%, transparent);
+}
+.vtable__note {
+  padding: var(--space-3);
+  font-size: var(--fs-body-sm);
+  color: var(--text);
+  opacity: 0.6;
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Streamlit embed ---------- */
+.vsection--demo {
+  border-top: 1px solid color-mix(in srgb, var(--detect) 40%, transparent);
+}
+.vembed {
+  margin-top: clamp(var(--space-5), 4vw, var(--space-8));
+  border: 1px solid color-mix(in srgb, var(--detect) 34%, transparent);
+  box-shadow: 0 0 70px -28px color-mix(in srgb, var(--detect) 70%, transparent);
+  background: var(--surface);
+}
+.vembed__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.vembed__dots {
+  display: inline-flex;
+  gap: 6px;
+}
+.vembed__dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+}
+.vembed__dots i:first-child {
+  background: color-mix(in srgb, var(--coral) 80%, transparent);
+}
+.vembed__dots i:nth-child(2) {
+  background: color-mix(in srgb, var(--amber) 80%, transparent);
+}
+.vembed__dots i:last-child {
+  background: color-mix(in srgb, var(--detect) 80%, transparent);
+}
+.vembed__url {
+  color: var(--text);
+  opacity: 0.7;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-inline: auto 0;
+  flex: 1;
+  text-align: center;
+}
+.vembed__open {
+  color: var(--detect);
+}
+.vembed__open:hover,
+.vembed__open:focus-visible {
+  text-decoration: underline;
+}
+.vembed__frame {
+  display: block;
+  width: 100%;
+  height: min(80vh, 720px);
+  border: none;
+  background: var(--bg);
+}
+.vembed__fallback {
+  margin-top: var(--space-3);
+  font-size: var(--fs-body-sm);
+  color: var(--text);
+  opacity: 0.7;
+}
+.vembed__fallback a {
+  color: var(--detect);
+  text-decoration: underline;
+}
+
+/* ---------- Footer ---------- */
+.vpage__footer {
+  padding-block: clamp(var(--space-8), 8vw, var(--space-12));
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.vpage__footer .vpage__back {
+  justify-content: center;
+}
+
+/* ---------- Scroll reveals (motion only; .reveal-on + data-reveal set by JS) ---------- */
+.vpage.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out);
+}
+.vpage.reveal-on [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Hover micro-interactions ---------- */
+.vcard .detection-box__corner {
+  transition: border-color var(--dur-med) var(--ease-out);
+}
+.vcard:not(.vcard--caveat):hover,
+.vcard:not(.vcard--caveat):focus-within {
+  --bracket: var(--detect);
+  box-shadow: 0 0 30px -8px color-mix(in srgb, var(--detect) 45%, transparent);
+}
+.vpipe__node {
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.vpipe__node:hover {
+  border-color: color-mix(in srgb, var(--detect) 55%, transparent);
+  background: color-mix(in srgb, var(--detect) 9%, var(--surface));
+}
+.vdelta {
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.vdelta:hover {
+  background: color-mix(in srgb, var(--detect) 12%, transparent);
+}
+
+/* subtle breathing glow on the hero perception frame */
+@media (prefers-reduced-motion: no-preference) {
+  .vhero__visual {
+    animation: vglow 5s ease-in-out infinite;
+  }
+  @keyframes vglow {
+    0%,
+    100% {
+      box-shadow: 0 0 60px -20px color-mix(in srgb, var(--detect) 55%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 84px -14px color-mix(in srgb, var(--detect) 82%, transparent);
+    }
+  }
+}
+
+/* ---------- Responsive ---------- */
+/* The 6-column split table gets cramped side-by-side before the other grids do,
+   so stack the two result tables one column earlier. */
+@media (max-width: 1080px) {
+  .vgrid--tables {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 900px) {
+  .vhero {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .vgrid--split,
+  .vgrid--tables,
+  .vdeltas,
+  .vproject__grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Pipeline goes to a clean vertical flow (full-width nodes, down arrows) before
+   the 3-node Vision lane would start wrapping horizontally (~680px). */
+@media (max-width: 767px) {
+  .vpipe__lane {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .vpipe__lane-label {
+    flex: none;
+  }
+  .vpipe__flow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .vpipe__arrow {
+    align-self: center;
+    transform: rotate(90deg);
+  }
+}
+@media (max-width: 560px) {
+  .vpage__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}

@@ -1,0 +1,214 @@
+/* ===== Experience — one-at-a-time cards → "path so far" line ===== */
+
+/* Fallback (reduced motion / mobile / no-JS): a readable stacked list. */
+.xp__stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 760px;
+}
+
+.xp__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+}
+
+.xp__dates {
+  color: var(--amber);
+}
+
+.xp__role {
+  font-size: var(--fs-h3);
+  color: var(--cream);
+  line-height: 1.15;
+}
+
+.xp__org {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data);
+  color: var(--text);
+  opacity: 0.65;
+}
+
+.xp__project {
+  font-weight: var(--fw-semibold);
+  color: var(--amber);
+}
+
+.xp__body {
+  font-size: var(--fs-body-sm);
+  color: var(--text);
+  opacity: 0.85;
+}
+
+/* Bulleted body: each point marked with a small cyan "detection" square. */
+.xp__body--list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+}
+.xp__body--list li {
+  position: relative;
+  padding-left: var(--space-3);
+  line-height: var(--lh-body);
+}
+.xp__body--list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  background: var(--detect);
+}
+
+.xp__chips {
+  padding-top: var(--space-1);
+}
+
+.xp__summary {
+  display: none;
+}
+
+/* Active (desktop + motion): pinned stage, cards centered one at a time. */
+.section.xp--active {
+  padding-block: 0;
+}
+.section.xp--active .section__inner {
+  min-height: 100vh;
+  max-width: min(1440px, 94vw); /* wider than the default container to use the space */
+  display: flex;
+  flex-direction: column;
+  padding-block: calc(var(--nav-h) + var(--space-3)) var(--space-4);
+}
+.section.xp--active .section__head {
+  flex: none;
+  margin-bottom: var(--space-3);
+}
+.xp--active .xp {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.xp--active .xp__stage {
+  position: absolute;
+  inset: 0;
+  display: block;
+  max-width: none;
+}
+.xp--active .xp__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(1080px, 94%);
+  display: grid;
+  grid-template-columns: 0.82fr 1.1fr;
+  gap: clamp(var(--space-4), 4vw, var(--space-8));
+  align-items: start;
+  padding: var(--space-4) var(--space-5);
+  will-change: transform, opacity;
+}
+.xp__card-meta,
+.xp__card-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.xp--active .xp__summary {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+}
+
+/* The "path so far" line — a rail with a dot for every role. */
+.xp__summary-label {
+  color: var(--detect);
+}
+.xp__track {
+  position: relative;
+  width: min(1120px, 90%);
+  height: 78px;
+}
+.xp__rail {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line);
+}
+.xp__summary-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-magma);
+  transform-origin: left center;
+}
+.xp__pts {
+  position: absolute;
+  inset: 0;
+}
+.xp__pt {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 30%;
+}
+.xp__pt--first {
+  transform: translateX(0);
+  align-items: flex-start;
+  text-align: left;
+}
+.xp__pt--last {
+  transform: translateX(-100%);
+  align-items: flex-end;
+  text-align: right;
+}
+.xp__pt-dot {
+  position: relative;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  background: var(--magenta);
+  outline: 3px solid var(--bg);
+  flex: none;
+}
+.xp__pt-dot--active {
+  background: var(--detect);
+  box-shadow: 0 0 12px 2px rgba(92, 244, 214, 0.5);
+}
+.xp__pt-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-data);
+  letter-spacing: var(--track-data);
+  text-transform: uppercase;
+  line-height: 1.25;
+  /* keep each line intact — the last point sits at left:100% where it would
+     otherwise collapse to min-content and wrap every word. */
+  white-space: nowrap;
+}
+.xp__pt-date {
+  color: var(--amber);
+}
+.xp__pt-role {
+  color: var(--text);
+  opacity: 0.85;
+}
+.xp__pt--last .xp__pt-role {
+  color: var(--detect);
+  opacity: 1;
+}

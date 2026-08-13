@@ -1,0 +1,102 @@
+/* ============================================================
+   Design tokens — sourced directly from 03-design-system.md.
+   Every value here traces to that file. Do not substitute
+   arbitrary defaults; change the doc first, then change here.
+   ============================================================ */
+
+:root {
+  /* --- Color: the magma colormap (Librosa/matplotlib default) --- */
+  --bg: #000004;        /* page background — colormap zero point */
+  --surface: #0d0612;   /* lifted surface: nav, cards */
+  --violet: #331067;    /* deep accent — dividers, low-emphasis fills */
+  --magenta: #842681;   /* mid accent — gradient midpoint, 2nd highlights */
+  --coral: #d6456c;     /* high-energy accent — active/hot states */
+  --amber: #fc8c63;     /* warm highlight — hover, metric callouts */
+  --cream: #fcfdbf;     /* near-white — primary headline, max-energy stop */
+  --text: #eceaf5;      /* body copy (not pure white) */
+  --detect: #5cf4d6;    /* the one cool color — detection UI ONLY:
+                           bounding-box outlines, active nav, focus rings */
+
+  /* Surfaces / lines derived from the palette (kept in-system) */
+  --surface-2: #160b1f;          /* slightly higher surface */
+  --line: rgba(132, 38, 129, 0.35);   /* hairline dividers (magenta-based) */
+  --line-soft: rgba(236, 234, 245, 0.1);
+
+  /* The magma gradient — ALWAYS the full sequence, never 2 stops. */
+  --gradient-magma: linear-gradient(
+    90deg,
+    var(--bg) 0%,
+    var(--violet) 22%,
+    var(--magenta) 45%,
+    var(--coral) 66%,
+    var(--amber) 84%,
+    var(--cream) 100%
+  );
+  --gradient-magma-v: linear-gradient(
+    0deg,
+    var(--bg) 0%,
+    var(--violet) 22%,
+    var(--magenta) 45%,
+    var(--coral) 66%,
+    var(--amber) 84%,
+    var(--cream) 100%
+  );
+
+  /* --- Typography: three roles, each doing one job --- */
+  --font-display: 'General Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+
+  /* Type scale (rem, 16px base) — clamped to viewport per 03 */
+  --fs-hero: clamp(2.75rem, 9vw, 7rem);       /* hero name 5–7rem */
+  --fs-tagline: clamp(1.25rem, 2.4vw, 1.75rem); /* hero tagline 1.5–1.75 */
+  --fs-h2: clamp(2rem, 4vw, 3rem);            /* section heading 2.5–3rem */
+  --fs-h3: clamp(1.25rem, 2.2vw, 1.6rem);
+  --fs-body: 1.125rem;                        /* body */
+  --fs-body-sm: 1rem;
+  --fs-data: 0.8125rem;                       /* data / tag */
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.25;
+  --lh-body: 1.6;
+
+  /* Tracking (letter-spacing) */
+  --track-hero: -0.02em;   /* -2% */
+  --track-h2: -0.01em;     /* -1% */
+  --track-data: 0.02em;    /* +2%, used uppercase */
+
+  /* --- Layout & spacing: 8px base unit --- */
+  --space-1: 0.5rem;   /* 8  */
+  --space-2: 1rem;     /* 16 */
+  --space-3: 1.5rem;   /* 24 */
+  --space-4: 2rem;     /* 32 */
+  --space-5: 2.5rem;   /* 40 */
+  --space-6: 3rem;     /* 48 */
+  --space-8: 4rem;     /* 64 */
+  --space-10: 5rem;    /* 80 */
+  --space-12: 6rem;    /* 96 */
+  --space-16: 8rem;    /* 128 */
+
+  /* Section rhythm: 12–16 units between sections (per 03) */
+  --section-pad-y: clamp(4rem, 9vw, 8rem);
+  --section-pad-x: clamp(1.25rem, 5vw, 4rem);
+
+  --maxw-text: 720px;   /* body/manifesto reading width */
+  --maxw-page: 1240px;  /* overall content container; visuals go full-bleed */
+
+  /* Sharp corners are the default motif (detection boxes, not rounded cards) */
+  --radius: 0px;
+
+  /* Nav */
+  --nav-h: 4rem;
+  --z-nav: 100;
+
+  /* Motion tokens (used for Phase 1 hover/focus; scroll work is Phase 2) */
+  --dur-fast: 150ms;
+  --dur-med: 280ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);   /* ≈ power2.out feel */
+}

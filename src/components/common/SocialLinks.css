@@ -1,0 +1,22 @@
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.social__link {
+  color: var(--text);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+a.social__link:hover,
+a.social__link:focus-visible {
+  color: var(--detect);
+}
+
+.social__link--todo {
+  color: var(--coral);
+  border: 1px dashed var(--coral);
+  padding: 0.15em 0.5em;
+  cursor: help;
+}

@@ -1,0 +1,118 @@
+/* The contact heading is real sentence copy, so let it run wider than the
+   default section-title cap. */
+#contact .section__title {
+  max-width: 22ch;
+  color: var(--cream);
+}
+
+.contact__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(var(--space-4), 5vw, var(--space-10));
+  align-items: start;
+}
+
+.contact__primary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.contact__body {
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+}
+
+.contact__email {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: var(--cream);
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.contact__email:hover,
+.contact__email:focus-visible {
+  color: var(--amber);
+  border-color: var(--amber);
+}
+
+.contact__phone {
+  color: var(--text);
+  opacity: 0.75;
+}
+
+.contact__resume {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: var(--fs-data);
+  letter-spacing: var(--track-data);
+  text-transform: uppercase;
+  color: var(--detect);
+  border: 1px solid var(--detect);
+  padding: var(--space-2) var(--space-3);
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.contact__resume:hover,
+.contact__resume:focus-visible {
+  background: var(--detect);
+  color: var(--bg);
+}
+
+.contact__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-left: 1px solid var(--line);
+  padding-left: var(--space-4);
+}
+
+.contact__meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contact__meta dt {
+  color: var(--amber);
+}
+
+.contact__meta dd {
+  color: var(--text);
+}
+
+.contact__meta-link {
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.contact__meta-link:hover,
+.contact__meta-link:focus-visible {
+  border-color: var(--text);
+}
+
+.contact__wave {
+  margin-top: clamp(var(--space-8), 12vw, var(--space-16));
+  height: clamp(60px, 12vw, 120px);
+  opacity: 0.85;
+}
+
+/* The closing signal wave travels continuously — see Waveform.jsx (`animate`).
+   JS-driven and gated by reduced motion, so no CSS animation is needed here. */
+
+@media (max-width: 768px) {
+  .contact__grid {
+    grid-template-columns: 1fr;
+  }
+  .contact__meta {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-4);
+  }
+}

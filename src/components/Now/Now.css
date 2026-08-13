@@ -1,0 +1,146 @@
+.now__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
+  gap: clamp(var(--space-5), 5vw, var(--space-10));
+  align-items: start;
+}
+
+.now__status {
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  color: var(--detect);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-8);
+  word-break: break-word;
+}
+
+.now__cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: var(--detect);
+  flex: none;
+}
+
+.now__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.now__subhead {
+  color: var(--amber);
+  margin-bottom: var(--space-3);
+}
+
+.now__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.now__degree {
+  font-family: var(--font-display);
+  font-weight: var(--fw-medium);
+  color: var(--cream);
+}
+
+.now__meta {
+  color: var(--text);
+  opacity: 0.65;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.now__item--lang {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: var(--space-2);
+}
+
+.now__lang-name {
+  color: var(--text);
+}
+
+/* --- Live signal monitor --- */
+.now__monitor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  height: 100%;
+}
+
+.now__monitor-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.now__monitor-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--detect);
+  box-shadow: 0 0 8px 1px var(--detect);
+  animation: now-monitor-pulse 1.6s ease-in-out infinite;
+}
+
+.now__monitor-label {
+  color: var(--detect);
+}
+
+.now__eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 120px;
+  padding-block: var(--space-2);
+}
+
+.now__eq-bar {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  transform-origin: bottom center;
+  background: var(--gradient-magma-v);
+  /* height is driven by JS as a single traveling wave (see Now.jsx) */
+}
+
+.now__monitor-caption {
+  color: var(--text);
+  opacity: 0.6;
+}
+
+@keyframes now-monitor-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.82);
+  }
+}
+
+@media (max-width: 860px) {
+  .now__layout {
+    grid-template-columns: 1fr;
+  }
+  .now__monitor {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 560px) {
+  .now__cols {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}

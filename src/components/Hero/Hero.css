@@ -1,0 +1,125 @@
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--nav-h) + var(--space-6)) var(--section-pad-x) var(--space-5);
+}
+
+.hero__inner {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: clamp(var(--space-4), 5vw, var(--space-10));
+  width: 100%;
+}
+
+.hero__eyebrow {
+  margin-bottom: var(--space-3);
+}
+
+.hero__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--track-hero);
+  line-height: 0.95;
+  color: var(--cream);
+  margin-bottom: var(--space-3);
+}
+
+.hero__tagline {
+  font-size: var(--fs-tagline);
+  line-height: var(--lh-snug);
+  color: var(--text);
+  max-width: 20ch;
+  margin-bottom: var(--space-4);
+}
+
+.hero__supporting {
+  color: var(--text);
+  opacity: 0.8;
+}
+
+/* --- Layered visual: spectrogram + floating waveform overlay --- */
+.hero__visual {
+  position: relative;
+  padding: var(--space-3);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  aspect-ratio: 2 / 1; /* matches the 48x24 spectrogram → no distortion */
+}
+
+.hero__stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__spec {
+  position: absolute;
+  inset: 0;
+  line-height: 0;
+}
+
+/* Floating waveform sits over the spectrogram. Hidden by default so reduced
+   motion shows the resolved spectrogram + detection instead. */
+.hero__wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* --- Centered scroll cue: wave line, text, bouncing arrow --- */
+/* Single-column grid sized to the text, so the wave line above stretches to
+   exactly the width of the scroll text below it. */
+.hero__scroll {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding-top: var(--space-4);
+}
+
+.hero__scroll-wave {
+  width: 100%;
+  height: 44px;
+  justify-self: stretch;
+}
+
+.hero__cue {
+  color: var(--detect);
+}
+
+.hero__scroll-arrow {
+  color: var(--detect);
+  font-size: 1.15rem;
+  line-height: 1;
+  animation: hero-arrow-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes hero-arrow-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(7px);
+    opacity: 1;
+  }
+}
+
+/* Stack below ~900px — visual drops under the text, text stays left-anchored. */
+@media (max-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+  }
+  .hero__visual {
+    margin-top: var(--space-4);
+  }
+}

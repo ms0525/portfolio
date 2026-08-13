@@ -1,0 +1,67 @@
+.manifesto {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center; /* quote sits centered when the section pins */
+  padding-block: calc(var(--nav-h) + var(--space-6)) var(--space-8);
+  padding-inline: var(--section-pad-x);
+  overflow: hidden;
+}
+
+.manifesto__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.manifesto__bg .spectrogram {
+  width: 100%;
+  height: 100%;
+  opacity: 0.22; /* a touch brighter than default faint so the shimmer reads */
+}
+
+/* The recurring scan line — a thin cyan indicator tied to scroll position.
+   Hidden by default (opacity 0) so it never shows static under reduced motion;
+   the motion branch makes it visible and sweeps it left to right. */
+.manifesto__scan {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: var(--detect);
+  box-shadow: 0 0 14px 2px rgba(92, 244, 214, 0.55);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Fade the texture into the page background top and bottom. */
+.manifesto::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    var(--bg) 0%,
+    transparent 35%,
+    transparent 65%,
+    var(--bg) 100%
+  );
+  pointer-events: none;
+}
+
+.manifesto__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.manifesto__text {
+  font-family: var(--font-body);
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  line-height: 1.45;
+  color: var(--cream);
+  text-wrap: balance;
+}

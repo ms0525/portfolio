@@ -1,0 +1,78 @@
+.analyzer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(var(--space-4), 4vw, var(--space-8)) var(--space-5);
+}
+
+@media (max-width: 900px) {
+  .analyzer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .analyzer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.analyzer__cluster {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.analyzer__cluster-label {
+  color: var(--detect);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--line);
+}
+
+.analyzer__chart {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  flex-wrap: nowrap; /* keep every cluster's bars on a single row */
+}
+
+.analyzer__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 0 1 64px; /* shrink to fit so the 6-bar cluster doesn't wrap */
+  min-width: 0;
+}
+
+.analyzer__bar-area {
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.analyzer__bar {
+  width: 16px;
+  background: var(--gradient-magma-v);
+  /* sharp top, like a spectrum bin */
+}
+
+.analyzer__skill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  opacity: 0.8;
+  text-align: center;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+@media (max-width: 480px) {
+  .analyzer__col {
+    flex-basis: 52px;
+  }
+  .analyzer__bar-area {
+    height: 96px;
+  }
+}

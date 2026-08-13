@@ -1,0 +1,25 @@
+.section {
+  position: relative;
+  padding-block: var(--section-pad-y);
+  padding-inline: var(--section-pad-x);
+}
+
+.section__head {
+  margin-bottom: var(--space-6);
+}
+
+.section__label {
+  margin-bottom: var(--space-2);
+}
+
+.section__title {
+  font-size: var(--fs-h2);
+  color: var(--cream);
+  max-width: 16ch;
+}
+
+.section__intro {
+  margin-top: var(--space-3);
+  color: var(--text);
+  opacity: 0.82;
+}
