@@ -5,13 +5,6 @@ import { skillClusters } from '../../content/skills'
 import SectionWrapper from '../common/SectionWrapper'
 import './Skills.css'
 
-// Near-uniform bar heights — deliberately NOT a proficiency meter (the CV makes
-// no such claim). The variation is just visual life for the analyzer look.
-function barHeight(ci, si) {
-  const s = Math.sin(ci * 3.1 + si * 1.7) * 0.5 + 0.5
-  return 72 + Math.round(s * 26) // 72%..98%
-}
-
 export default function SpectrumAnalyzer() {
   const root = useRef(null)
 
@@ -72,16 +65,16 @@ export default function SpectrumAnalyzer() {
       title="Instrumentation"
     >
       <div className="analyzer" ref={root}>
-        {skillClusters.map((cluster, ci) => (
+        {skillClusters.map((cluster) => (
           <div className="analyzer__cluster" key={cluster.id}>
             <p className="data-label analyzer__cluster-label">{cluster.label}</p>
             <ul className="analyzer__chart">
-              {cluster.skills.map((skill, si) => (
-                <li className="analyzer__col" key={skill}>
+              {cluster.skills.map((skill) => (
+                <li className="analyzer__col" key={skill.name}>
                   <div className="analyzer__bar-area">
-                    <div className="analyzer__bar" style={{ height: `${barHeight(ci, si)}%` }} />
+                    <div className="analyzer__bar" style={{ height: `${skill.level}%` }} />
                   </div>
-                  <span className="analyzer__skill">{skill}</span>
+                  <span className="analyzer__skill">{skill.name}</span>
                 </li>
               ))}
             </ul>
