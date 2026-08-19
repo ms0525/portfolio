@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import App from './App.jsx'
 import VisionPage from './pages/VisionPage.jsx'
+import Landing from './pages/Landing.jsx'
 
-// Minimal History-API router. Path-based (not hash) on purpose — the home page
-// already uses #section anchors for in-page scrolling, so a hash router would
-// collide with them. Two routes: '/' (audio portfolio) and '/vision'.
+// Minimal History-API router. Path-based (not hash) on purpose — the audio
+// portfolio uses #section anchors for in-page scrolling, so a hash router would
+// collide with them. Routes: '/' (multi-domain landing splash), '/audio' (the
+// audio portfolio), '/vision' (the computer-vision page).
 export function navigate(to) {
   if (to === window.location.pathname) return
   window.history.pushState({}, '', to)
@@ -21,5 +23,7 @@ export default function Router() {
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
-  return path.startsWith('/vision') ? <VisionPage /> : <App />
+  if (path.startsWith('/vision')) return <VisionPage />
+  if (path.startsWith('/audio')) return <App />
+  return <Landing />
 }

@@ -16,7 +16,11 @@ export default function App() {
   // ScrollSmoother is created — native scrolling, fully static layout.
   useGSAP(() => {
     const mm = gsap.matchMedia()
-    mm.add(MQ.motion, () => {
+
+    // Smooth scroll on DESKTOP ONLY. On touch devices ScrollSmoother's
+    // normalizeScroll hijacks native momentum and makes scrolling feel laggy and
+    // "stuck" (especially scrolling back up) — native touch scroll is far better.
+    mm.add(MQ.desktop, () => {
       const smoother = ScrollSmoother.create({
         wrapper: '#smooth-wrapper',
         content: '#smooth-content',
@@ -24,21 +28,20 @@ export default function App() {
         effects: false,
         normalizeScroll: true,
       })
-
-      // Pinned-section heights shift when web fonts finish loading — refresh
-      // once they're ready so every ScrollTrigger measures correctly.
-      let cancelled = false
-      if (document.fonts) {
-        document.fonts.ready.then(() => {
-          if (!cancelled) ScrollTrigger.refresh()
-        })
-      }
-
-      return () => {
-        cancelled = true
-        smoother.kill()
-      }
+      return () => smoother.kill()
     })
+
+    // Pinned-section heights shift when web fonts finish loading — refresh once
+    // they're ready so every ScrollTrigger measures correctly (all breakpoints).
+    let cancelled = false
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        if (!cancelled) ScrollTrigger.refresh()
+      })
+    }
+    return () => {
+      cancelled = true
+    }
   })
 
   return (

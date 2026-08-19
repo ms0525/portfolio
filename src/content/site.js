@@ -40,7 +40,7 @@ export const contact = {
   email: 'maazsaeed61998@gmail.com',
   phone: '+49 176 56897279',
   location: 'Ilmenau, Germany',
-  resume: '/resume.pdf',
+  resume: '/Maaz_Saeed_CV.pdf',
 }
 
 // Profile URLs from Maaz's CV. (`url: null` would render a visible "TODO"

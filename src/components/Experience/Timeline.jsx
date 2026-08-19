@@ -72,13 +72,15 @@ export default function Timeline({ entries }) {
           return () => section.classList.remove('xp--active')
         }
 
-        // Mobile: readable stacked cards, light fade-up.
+        // Mobile: readable stacked cards, a ONE-SHOT fade-up. `once` (not scrub)
+        // so it never reverses or re-animates when you scroll back up — that
+        // reversal is what made the section feel "stuck" on touch.
         gsap.from(cards, {
           opacity: 0,
           y: 24,
           stagger: 0.12,
           ease: 'power2.out',
-          scrollTrigger: { trigger: root.current, start: 'top 80%', end: 'top 40%', scrub: true },
+          scrollTrigger: { trigger: root.current, start: 'top 85%', once: true },
         })
       })
     },

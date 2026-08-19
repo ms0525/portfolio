@@ -12,6 +12,10 @@ function backHome(e) {
   e.preventDefault()
   navigate('/')
 }
+function goAudio(e) {
+  e.preventDefault()
+  navigate('/audio')
+}
 
 function ResultsTable({ data }) {
   return (
@@ -201,7 +205,7 @@ export default function VisionPage() {
           <span aria-hidden="true">←</span> Maaz&nbsp;Saeed
         </a>
         <nav className="vpage__links" aria-label="Project links">
-          <a href="/" onClick={backHome} className="data-label vpage__navlink">
+          <a href="/audio" onClick={goAudio} className="data-label vpage__navlink">
             Audio portfolio
           </a>
           <a href={repo} target="_blank" rel="noreferrer" className="data-label vpage__navlink">
@@ -401,7 +405,7 @@ export default function VisionPage() {
         </section>
 
         <footer className="vpage__footer">
-          <a href="/" onClick={backHome} className="vpage__back">
+          <a href="/audio" onClick={goAudio} className="vpage__back">
             <span aria-hidden="true">←</span> Back to the audio portfolio
           </a>
         </footer>

@@ -11,11 +11,16 @@ export default function Nav() {
     close()
     navigate('/vision')
   }
+  const goLanding = (e) => {
+    e.preventDefault()
+    close()
+    navigate('/')
+  }
 
   return (
     <header className="nav">
       <div className="nav__inner container">
-        <a className="nav__brand" href="#top" onClick={close}>
+        <a className="nav__brand" href="/" onClick={goLanding}>
           <span className="nav__brand-mark" aria-hidden="true" />
           Maaz&nbsp;Saeed
         </a>

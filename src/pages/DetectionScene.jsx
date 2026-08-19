@@ -86,11 +86,13 @@ export default function DetectionScene({ className = '' }) {
     { scope: svgRef }
   )
 
-  // Flashlight: points near the cursor brighten, enlarge, and turn cyan — like a
-  // sensor sweeping the cloud. Skipped on touch / reduced motion. rAF-throttled.
+  // Flashlight: points near the pointer brighten, enlarge, and turn cyan — like a
+  // sensor sweeping the cloud. Works with mouse hover AND touch: tap / hold / drag
+  // lights up the dots near your finger, then fades on release. Touch listeners are
+  // passive, so scrolling past the scene is never blocked. Skipped under reduced motion.
   useEffect(() => {
     const svg = svgRef.current
-    if (!svg || !window.matchMedia('(prefers-reduced-motion: no-preference) and (pointer: fine)').matches) return
+    if (!svg || !window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return
     const circles = Array.from(svg.querySelectorAll('.vscene__points circle'))
     const base = circles.map((c) => ({
       x: +c.getAttribute('cx'),
@@ -101,15 +103,18 @@ export default function DetectionScene({ className = '' }) {
     }))
     const R = 96
     let raf = 0
+    let fadeRaf = 0
     let cur = null
-    const render = () => {
-      raf = 0
+    let fade = 1 // 1 while active; decays after a touch lifts so a quick tap leaves a glow
+    let touchedAt = 0 // suppress the synthetic mouse events iOS fires right after a touch
+
+    const paint = () => {
       for (let i = 0; i < circles.length; i++) {
         const b = base[i]
         let boost = 0
         if (cur) {
           const d = Math.hypot(b.x - cur.x, b.y - cur.y)
-          if (d < R) boost = 1 - d / R
+          if (d < R) boost = (1 - d / R) * fade
         }
         const c = circles[i]
         c.style.opacity = Math.min(1, b.o + boost * 0.9)
@@ -117,26 +122,74 @@ export default function DetectionScene({ className = '' }) {
         c.setAttribute('fill', boost > 0.28 ? '#5cf4d6' : b.fill)
       }
     }
-    const onMove = (e) => {
+    const schedule = () => {
+      if (!raf)
+        raf = requestAnimationFrame(() => {
+          raf = 0
+          paint()
+        })
+    }
+    const pointAt = (clientX, clientY) => {
       const ctm = svg.getScreenCTM()
-      if (!ctm) return
+      if (!ctm) return null
       const pt = svg.createSVGPoint()
-      pt.x = e.clientX
-      pt.y = e.clientY
+      pt.x = clientX
+      pt.y = clientY
       const p = pt.matrixTransform(ctm.inverse())
-      cur = { x: p.x, y: p.y }
-      if (!raf) raf = requestAnimationFrame(render)
+      return { x: p.x, y: p.y }
+    }
+    const activate = (clientX, clientY) => {
+      cancelAnimationFrame(fadeRaf)
+      fade = 1
+      cur = pointAt(clientX, clientY)
+      schedule()
+    }
+
+    const onMove = (e) => {
+      if (performance.now() - touchedAt < 700) return // ignore synthetic mouse after touch
+      activate(e.clientX, e.clientY)
     }
     const onLeave = () => {
       cur = null
-      if (!raf) raf = requestAnimationFrame(render)
+      fade = 1
+      schedule()
     }
+    const onTouch = (e) => {
+      touchedAt = performance.now()
+      const t = e.touches[0]
+      if (t) activate(t.clientX, t.clientY)
+    }
+    const onTouchEnd = () => {
+      touchedAt = performance.now()
+      cancelAnimationFrame(fadeRaf)
+      const start = performance.now()
+      const tick = (now) => {
+        fade = Math.max(0, 1 - (now - start) / 450)
+        paint()
+        if (fade > 0) fadeRaf = requestAnimationFrame(tick)
+        else {
+          cur = null
+          fade = 1
+        }
+      }
+      fadeRaf = requestAnimationFrame(tick)
+    }
+
     svg.addEventListener('mousemove', onMove)
     svg.addEventListener('mouseleave', onLeave)
+    svg.addEventListener('touchstart', onTouch, { passive: true })
+    svg.addEventListener('touchmove', onTouch, { passive: true })
+    svg.addEventListener('touchend', onTouchEnd, { passive: true })
+    svg.addEventListener('touchcancel', onTouchEnd, { passive: true })
     return () => {
       svg.removeEventListener('mousemove', onMove)
       svg.removeEventListener('mouseleave', onLeave)
-      if (raf) cancelAnimationFrame(raf)
+      svg.removeEventListener('touchstart', onTouch)
+      svg.removeEventListener('touchmove', onTouch)
+      svg.removeEventListener('touchend', onTouchEnd)
+      svg.removeEventListener('touchcancel', onTouchEnd)
+      cancelAnimationFrame(raf)
+      cancelAnimationFrame(fadeRaf)
     }
   }, [])
 
